@@ -25,6 +25,14 @@ public class LineModel {
         notifySubscribers();
     }
 
+    public void adjustLine(DLine line, double x2, double y2) {
+        line.adjust(x2, y2);
+        notifySubscribers();
+    }
+
+    public List<DLine> getLines() {
+        return lines;
+    }
 
     public void addSubscriber(Subscriber sub) {
         subscribers.add(sub);
