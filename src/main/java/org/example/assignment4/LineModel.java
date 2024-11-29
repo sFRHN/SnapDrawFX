@@ -30,12 +30,22 @@ public class LineModel {
         notifySubscribers();
     }
 
+    public Endpoint findNearPoint(double x, double y) {
+
+        // Snapping to the grid
+        x = Math.round(x / 20) * 20;
+        y = Math.round(y / 20) * 20;
+
+        return new Endpoint(x, y);
+    }
+
     public List<DLine> getLines() {
         return lines;
     }
 
     public void addSubscriber(Subscriber sub) {
         subscribers.add(sub);
+        notifySubscribers();
     }
 
     private void notifySubscribers() {
