@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
-public class DView extends StackPane {
+public class DView extends StackPane implements Subscriber {
 
     private LineModel model;
     private InteractionModel iModel;
