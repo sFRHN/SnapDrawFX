@@ -1,8 +1,12 @@
 package org.example.assignment4;
 
+import java.util.List;
+
 public class InteractionModel {
 
     private DLine selected;
+    private List<Subscriber> subscribers;
+
 
     public InteractionModel() {
         selected = null;
@@ -18,6 +22,14 @@ public class InteractionModel {
 
     public void clearSelection() {
         selected = null;
+    }
+
+    public void addSubscriber(Subscriber sub) {
+        subscribers.add(sub);
+    }
+
+    private void notifySubscribers() {
+        subscribers.forEach(Subscriber::modelUpdated);
     }
 
 }
