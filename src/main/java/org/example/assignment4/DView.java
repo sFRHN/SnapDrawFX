@@ -11,7 +11,7 @@ public class DView extends StackPane implements Subscriber {
     private InteractionModel iModel;
     private GraphicsContext gc;
     private Canvas myCanvas;
-    private int gridSize = 50;
+    private int gridSize = 20;
 
     public DView() {
         myCanvas = new Canvas(1000, 800);
