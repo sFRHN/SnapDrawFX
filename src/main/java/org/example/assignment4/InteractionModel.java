@@ -1,5 +1,6 @@
 package org.example.assignment4;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InteractionModel {
@@ -10,6 +11,7 @@ public class InteractionModel {
 
     public InteractionModel() {
         selected = null;
+        subscribers = new ArrayList<>();
     }
 
     public DLine getSelected() {
