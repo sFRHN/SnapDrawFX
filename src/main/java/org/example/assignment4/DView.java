@@ -24,11 +24,11 @@ public class DView extends StackPane {
     public void setiModel(InteractionModel iModel) { this.iModel = iModel;}
 
     public void setupEvents(AppController controller) {
-        myCanvas.setOnMousePressed(e -> controller.handlePressed(e));
-        myCanvas.setOnMouseDragged(e -> controller.handleDragged(e));
-        myCanvas.setOnMouseReleased(e -> controller.handleReleased(e));
-//        myCanvas.setOnKeyPressed(e -> controller.handleKeyPressed(e));
-//        myCanvas.setOnKeyReleased(e -> controller.handleKeyReleased(e));
+        myCanvas.setOnMousePressed(controller::handlePressed);
+        myCanvas.setOnMouseDragged(controller::handleDragged);
+        myCanvas.setOnMouseReleased(controller::handleReleased);
+        myCanvas.setOnKeyPressed(controller::handleKeyPressed);
+        myCanvas.setOnKeyReleased(controller::handleKeyReleased);
     }
 
     private void draw() {
