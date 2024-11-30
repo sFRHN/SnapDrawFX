@@ -39,6 +39,15 @@ public class LineModel {
         return new Endpoint(x, y);
     }
 
+    public DLine overLine(double mx, double my) {
+        for (DLine line : lines) {
+            if (line.onLine(mx, my)) {
+                return line;
+            }
+        }
+        return null;
+    }
+
     public List<DLine> getLines() {
         return lines;
     }
