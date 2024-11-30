@@ -7,7 +7,7 @@ public class InteractionModel {
 
     private DLine selected;
     private List<Subscriber> subscribers;
-
+    private int handleRadius = 5;
 
     public InteractionModel() {
         selected = null;
@@ -20,18 +20,19 @@ public class InteractionModel {
 
     public void setSelected(DLine line) {
         selected = line;
+        notifySubscribers();
     }
 
     public void clearSelection() {
         selected = null;
+        notifySubscribers();
     }
 
-    public void addSubscriber(Subscriber sub) {
-        subscribers.add(sub);
+    public int getRadius() {
+        return handleRadius;
     }
 
-    private void notifySubscribers() {
-        subscribers.forEach(Subscriber::modelUpdated);
-    }
+    public void addSubscriber(Subscriber sub) { subscribers.add(sub);}
+    private void notifySubscribers() { subscribers.forEach(Subscriber::modelUpdated); }
 
 }
