@@ -25,7 +25,6 @@ public class AppController {
     public void setModel(LineModel model) {
         this.model = model;
     }
-
     public void setIModel(InteractionModel iModel) {
         this.iModel = iModel;
     }
@@ -41,15 +40,14 @@ public class AppController {
     ControllerState ready = new ControllerState() {
 
         @Override
-        void handlePressed(MouseEvent event) {
+        void handlePressed(MouseEvent e) {
 
-            if (event.isShiftDown()) {
-                snap(event.getX(), event.getY());
+            if (e.isShiftDown()) {
+                snap(e.getX(), e.getY());
                 DLine line = model.addLine(snapx, snapy, snapx, snapy);
                 iModel.setSelected(line);
                 currentState = creating;
             }
-
         }
 
     };
@@ -58,13 +56,13 @@ public class AppController {
     ControllerState creating = new ControllerState() {
 
         @Override
-        void handleDragged(MouseEvent event) {
-            model.adjustLine(iModel.getSelected(), event.getX(), event.getY());
+        void handleDragged(MouseEvent e) {
+            model.adjustLine(iModel.getSelected(), e.getX(), e.getY());
         }
 
         @Override
-        void handleReleased(MouseEvent event) {
-            snap(event.getX(), event.getY());
+        void handleReleased(MouseEvent e) {
+            snap(e.getX(), e.getY());
             model.adjustLine(iModel.getSelected(), snapx, snapy);
             currentState = ready;
         }
