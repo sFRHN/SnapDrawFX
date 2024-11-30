@@ -28,13 +28,14 @@ public class DView extends StackPane implements Subscriber {
         myCanvas.setOnMouseReleased(controller::handleReleased);
         myCanvas.setOnKeyPressed(controller::handleKeyPressed);
         myCanvas.setOnKeyReleased(controller::handleKeyReleased);
+        myCanvas.setOnMouseMoved(controller::handleMoved);
     }
 
     private void draw() {
         int gridSize = 20;
         gc.clearRect(0, 0, myCanvas.getWidth(), myCanvas.getHeight());
         gc.setLineWidth(1);
-        gc.setStroke(new Color(0,0,0,0.3));
+        gc.setStroke(new Color(0,0,0,0.1));
 
         // Draw the grid
         for (int i = 0; i < myCanvas.getWidth(); i += gridSize) {
@@ -56,14 +57,22 @@ public class DView extends StackPane implements Subscriber {
         }
         gc.strokeLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
 
+        if (iModel.getHovered() == line) {
+            gc.setStroke(Color.rgb(128, 128, 128, 0.25));
+            gc.setLineWidth(10);
+            gc.strokeLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+        }
+
         if (iModel.getSelected() == line) {
             drawHandles(line);
         }
+
 
     }
 
     private void drawHandles(DLine line) {
         gc.setFill(Color.WHITE);
+        gc.setLineWidth(2);
         double circleRadius = iModel.getRadius();
         gc.strokeOval(line.getX1()- circleRadius, line.getY1() - circleRadius, 2 * circleRadius, 2 * circleRadius);
         gc.strokeOval(line.getX2() - circleRadius, line.getY2() - circleRadius, 2 * circleRadius, 2 * circleRadius);
