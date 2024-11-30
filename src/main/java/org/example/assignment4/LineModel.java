@@ -30,6 +30,11 @@ public class LineModel {
         notifySubscribers();
     }
 
+    public void moveLine(DLine line, double dx, double dy) {
+        line.moveLine(dx, dy);
+        notifySubscribers();
+    }
+
     public Endpoint findGrid(double x, double y) {
 
         // Snapping to the grid

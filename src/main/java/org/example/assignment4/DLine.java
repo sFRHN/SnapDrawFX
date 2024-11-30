@@ -22,6 +22,11 @@ public class DLine {
     public Endpoint getLeftEndpoint() { return leftEP; }
     public Endpoint getRightEndpoint() { return rightEP; }
 
+    public void moveLine(double dx, double dy) {
+        this.leftEP.move(dx, dy);
+        this.rightEP.move(dx, dy);
+    }
+
     public void updatePosition(Endpoint ep, double mx, double my) {
         if (ep.equals(leftEP)) {
             leftEP.setX(mx);

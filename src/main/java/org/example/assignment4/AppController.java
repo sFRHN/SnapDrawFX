@@ -67,6 +67,9 @@ public class AppController {
                 iModel.setSelected(line);
                 currentState = creating;
             }
+            else if (iModel.getSelected() != null) {
+                currentState = dragging;
+            }
         }
 
         @Override
@@ -98,6 +101,31 @@ public class AppController {
         }
 
     };
+
+
+
+    ControllerState dragging = new ControllerState() {
+
+        @Override
+        void handleDragged(MouseEvent e) {
+
+            double dx = e.getX() - prevX;
+            double dy = e.getY() - prevY;
+
+            model.moveLine(iModel.getSelected(), dx, dy);
+
+            prevX = e.getX();
+            prevY = e.getY();
+
+        }
+
+        @Override
+        void handleReleased(MouseEvent e) {
+            currentState = ready;
+        }
+
+    };
+
 
 
     ControllerState resizing = new ControllerState() {
