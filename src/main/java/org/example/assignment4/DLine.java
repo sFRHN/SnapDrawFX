@@ -33,4 +33,25 @@ public class DLine {
         }
     }
 
+    public boolean onLine(double mx, double my) {
+
+        double numerator, denominator, fraction;
+        numerator = Math.abs((getY2() - getY1()) * mx - (getX2() - getX1()) * my + getX2() * getY1() - getY2() * getX1());
+        denominator = Math.sqrt(Math.pow(getY2() - getY1(), 2) + Math.pow(getX2() - getX1(), 2));
+        fraction = numerator / denominator;
+
+        if (fraction > 5) {
+            return false;
+        }
+
+        // Check if the point is within the segment
+        double minX = Math.min(getX1(), getX2());
+        double maxX = Math.max(getX1(), getX2());
+        double minY = Math.min(getY1(), getY2());
+        double maxY = Math.max(getY1(), getY2());
+
+        return (mx >= minX && mx <= maxX && my >= minY && my <= maxY);
+
+    }
+
 }
