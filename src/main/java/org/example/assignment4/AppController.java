@@ -12,6 +12,7 @@ public class AppController {
 
 
     public abstract static class ControllerState {
+        void handleMoved(MouseEvent event) {}
         void handlePressed(MouseEvent event) {}
         void handleDragged(MouseEvent event) {}
         void handleReleased(MouseEvent event) {}
@@ -28,6 +29,7 @@ public class AppController {
         this.iModel = iModel;
     }
 
+    public void handleMoved(MouseEvent event) { currentState.handleMoved(event); }
     public void handlePressed(MouseEvent event) { currentState.handlePressed(event); }
     public void handleDragged(MouseEvent event) { currentState.handleDragged(event); }
     public void handleReleased(MouseEvent event) { currentState.handleReleased(event); }
@@ -50,6 +52,9 @@ public class AppController {
             else if (iModel.getSelected() != null && iModel.onHandle(e.getX(), e.getY())) {
                 currentState = resizing;
             }
+            else  if (model.overLine(e.getX(), e.getY()) != null) {
+                iModel.setSelected(model.overLine(e.getX(), e.getY()));
+            }
             else {
                 iModel.clearSelected();
             }
@@ -61,6 +66,17 @@ public class AppController {
                 DLine line = model.addLine(snapx, snapy, snapx, snapy);
                 iModel.setSelected(line);
                 currentState = creating;
+            }
+        }
+
+        @Override
+        void handleMoved(MouseEvent e) {
+            DLine line = model.overLine(e.getX(), e.getY());
+            if (line != null) {
+                iModel.setHovered(line);
+            }
+            else {
+                iModel.setHovered(null);
             }
         }
 
