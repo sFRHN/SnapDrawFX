@@ -30,7 +30,7 @@ public class LineModel {
         notifySubscribers();
     }
 
-    public Endpoint findNearPoint(double x, double y) {
+    public Endpoint findGrid(double x, double y) {
 
         // Snapping to the grid
         x = Math.round(x / 20) * 20;
