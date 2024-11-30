@@ -6,33 +6,60 @@ import java.util.List;
 public class InteractionModel {
 
     private DLine selected;
-    private List<Subscriber> subscribers;
-    private int handleRadius = 5;
+    private final List<Subscriber> subscribers;
+    private final int handleRadius = 5;
 
     public InteractionModel() {
         selected = null;
         subscribers = new ArrayList<>();
     }
 
-    public DLine getSelected() {
-        return selected;
-    }
-
+    public DLine getSelected() { return selected; }
     public void setSelected(DLine line) {
         selected = line;
         notifySubscribers();
     }
 
-    public void clearSelection() {
+    public void clearSelected() {
         selected = null;
         notifySubscribers();
     }
 
-    public int getRadius() {
-        return handleRadius;
-    }
-
+    public int getRadius() { return handleRadius; }
     public void addSubscriber(Subscriber sub) { subscribers.add(sub);}
     private void notifySubscribers() { subscribers.forEach(Subscriber::modelUpdated); }
+
+
+    private boolean checkLeftPoint(double mx, double my) {
+        return Math.hypot(mx - selected.getX1(), my - selected.getY1()) <= handleRadius;
+    }
+
+
+    private boolean checkRightPoint(double mx, double my) {
+        return Math.hypot(mx - selected.getX2(), my - selected.getY2()) <= handleRadius;
+    }
+
+
+    public boolean onHandle(double mx, double my) {
+        return checkLeftPoint(mx, my) || checkRightPoint(mx, my);
+    }
+
+
+    public Endpoint whichEndPoint(double mx, double my) {
+        if (checkLeftPoint(mx, my)) {
+            return selected.getLeftEndpoint();
+        }
+        else if (checkRightPoint(mx, my)) {
+            return selected.getRightEndpoint();
+        }
+        else {
+            return null;
+        }
+    }
+
+    public void updatePosition(Endpoint ep, double mx, double my) {
+        selected.updatePosition(ep, mx, my);
+        notifySubscribers();
+    }
 
 }
