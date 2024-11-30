@@ -6,6 +6,7 @@ import java.util.List;
 public class InteractionModel {
 
     private DLine selected;
+    private DLine hovered;
     private final List<Subscriber> subscribers;
     private final int handleRadius = 5;
 
@@ -19,9 +20,18 @@ public class InteractionModel {
         selected = line;
         notifySubscribers();
     }
-
     public void clearSelected() {
         selected = null;
+        notifySubscribers();
+    }
+
+    public DLine getHovered() { return hovered; }
+    public void setHovered(DLine line) {
+        hovered = line;
+        notifySubscribers();
+    }
+    public void clearHovered() {
+        hovered = null;
         notifySubscribers();
     }
 
