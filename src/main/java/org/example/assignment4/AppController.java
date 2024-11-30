@@ -5,7 +5,6 @@ import javafx.scene.input.MouseEvent;
 
 public class AppController {
 
-    private enum State {READY, CREATING}
     private LineModel model;
     private InteractionModel iModel;
     private ControllerState currentState;
@@ -42,8 +41,23 @@ public class AppController {
         @Override
         void handlePressed(MouseEvent e) {
 
+            prevX = e.getX();
+            prevY = e.getY();
+
             if (e.isShiftDown()) {
                 snap(e.getX(), e.getY());
+            }
+            else if (iModel.getSelected() != null && iModel.onHandle(e.getX(), e.getY())) {
+                currentState = resizing;
+            }
+            else {
+                iModel.clearSelected();
+            }
+        }
+
+        @Override
+        void handleDragged(MouseEvent e) {
+            if (e.isShiftDown()) {
                 DLine line = model.addLine(snapx, snapy, snapx, snapy);
                 iModel.setSelected(line);
                 currentState = creating;
@@ -70,11 +84,33 @@ public class AppController {
     };
 
 
+    ControllerState resizing = new ControllerState() {
+
+        Endpoint ep;
+
+        @Override
+        void handleDragged(MouseEvent e) {
+            ep = iModel.whichEndPoint(prevX, prevY);
+            iModel.updatePosition(ep, e.getX(), e.getY());
+
+            prevX = e.getX();
+            prevY = e.getY();
+        }
+
+        @Override
+        void handleReleased(MouseEvent e) {
+            snap(e.getX(), e.getY());
+            iModel.updatePosition(ep, snapx, snapy);
+            currentState = ready;
+        }
+
+    };
+
+
     public void snap(double x, double y) {
         Endpoint ep = model.findGrid(x, y);
-        snapx = ep.x;
-        snapy = ep.y;
-
+        snapx = ep.getX();
+        snapy = ep.getY();
     }
 
 }
