@@ -9,9 +9,8 @@ public class DView extends StackPane implements Subscriber {
 
     private LineModel model;
     private InteractionModel iModel;
-    private GraphicsContext gc;
-    private Canvas myCanvas;
-    private int gridSize = 20;
+    private final GraphicsContext gc;
+    private final Canvas myCanvas;
 
     public DView() {
         myCanvas = new Canvas(1000, 800);
@@ -32,8 +31,9 @@ public class DView extends StackPane implements Subscriber {
     }
 
     private void draw() {
+        int gridSize = 20;
         gc.clearRect(0, 0, myCanvas.getWidth(), myCanvas.getHeight());
-        gc.setStroke(Color.BLACK);
+        gc.setStroke(new Color(0,0,0,0.3));
 
         // Draw the grid
         for (int i = 0; i < myCanvas.getWidth(); i += gridSize) {
@@ -45,6 +45,11 @@ public class DView extends StackPane implements Subscriber {
 
         // Draw the lines
         model.getLines().forEach(line -> {
+            if (iModel.getSelected() == line) {
+                gc.setStroke(Color.PINK);
+            } else {
+                gc.setStroke(Color.MEDIUMPURPLE);
+            }
             gc.strokeLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
         });
     }
