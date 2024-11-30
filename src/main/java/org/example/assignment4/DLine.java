@@ -22,4 +22,15 @@ public class DLine {
     public Endpoint getLeftEndpoint() { return leftEP; }
     public Endpoint getRightEndpoint() { return rightEP; }
 
+    public void updatePosition(Endpoint ep, double mx, double my) {
+        if (ep.equals(leftEP)) {
+            leftEP.setX(mx);
+            leftEP.setY(my);
+        }
+        else if (ep.equals(rightEP)) {
+            rightEP.setX(mx);
+            rightEP.setY(my);
+        }
+    }
+
 }
