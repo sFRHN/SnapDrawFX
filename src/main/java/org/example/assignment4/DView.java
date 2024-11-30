@@ -64,7 +64,7 @@ public class DView extends StackPane implements Subscriber {
 
     private void drawHandles(DLine line) {
         gc.setFill(Color.WHITE);
-        double circleRadius = 5;
+        double circleRadius = iModel.getRadius();
         gc.strokeOval(line.getX1()- circleRadius, line.getY1() - circleRadius, 2 * circleRadius, 2 * circleRadius);
         gc.strokeOval(line.getX2() - circleRadius, line.getY2() - circleRadius, 2 * circleRadius, 2 * circleRadius);
         gc.fillOval(line.getX1()- circleRadius, line.getY1() - circleRadius, 2 * circleRadius, 2 * circleRadius);
