@@ -5,8 +5,8 @@ import java.util.List;
 
 public class LineModel {
 
-    private List<DLine> lines;
-    private List<Subscriber> subscribers;
+    private final List<DLine> lines;
+    private final List<Subscriber> subscribers;
 
     public LineModel() {
         lines = new ArrayList<>();
@@ -32,6 +32,16 @@ public class LineModel {
 
     public void moveLine(DLine line, double dx, double dy) {
         line.moveLine(dx, dy);
+        notifySubscribers();
+    }
+
+    public void rotateLine(DLine line, String direction) {
+        line.rotate(direction);
+        notifySubscribers();
+    }
+
+    public void scaleLine(DLine line, String scale) {
+        line.scale(scale);
         notifySubscribers();
     }
 
