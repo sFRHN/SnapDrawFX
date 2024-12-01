@@ -56,7 +56,7 @@ public class AppController {
                 iModel.setSelected(model.overLine(e.getX(), e.getY()));
             }
             else {
-                iModel.clearSelected();
+                iModel.setSelected(null);
             }
         }
 
