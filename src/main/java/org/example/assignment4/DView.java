@@ -50,7 +50,7 @@ public class DView extends StackPane implements Subscriber {
     private void drawLines(DLine line) {
 
         gc.setLineWidth(2);
-        if (iModel.getSelected() == line) {
+        if (iModel.getSelected().contains(line)) {
             gc.setStroke(Color.PINK);
         } else {
             gc.setStroke(Color.MEDIUMPURPLE);
@@ -62,8 +62,7 @@ public class DView extends StackPane implements Subscriber {
             gc.setLineWidth(10);
             gc.strokeLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
         }
-
-        if (iModel.getSelected() == line) {
+        if (iModel.getSelected().contains(line)) {
             drawHandles(line);
         }
 
