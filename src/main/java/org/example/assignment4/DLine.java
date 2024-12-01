@@ -38,6 +38,37 @@ public class DLine {
         }
     }
 
+    public void rotate(String direction) {
+
+        // Rotation
+
+    }
+
+    public void scale(String scale) {
+
+        double factor = 1.0;
+        if (scale.equals("up")) {
+            factor = 1.1;
+        }
+        else if (scale.equals("down")) {
+            factor = 0.9;
+        }
+        double midX = (getX1() + getX2()) / 2;
+        double midY = (getY1() + getY2()) / 2;
+
+        double newX1 = midX + (getX1() - midX) * factor;
+        double newY1 = midY + (getY1() - midY) * factor;
+        double newX2 = midX + (getX2() - midX) * factor;
+        double newY2 = midY + (getY2() - midY) * factor;
+
+        leftEP.setX(newX1);
+        leftEP.setY(newY1);
+        rightEP.setX(newX2);
+        rightEP.setY(newY2);
+
+    }
+
+
     public boolean onLine(double mx, double my) {
 
         double numerator, denominator, fraction;
