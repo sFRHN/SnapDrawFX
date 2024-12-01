@@ -5,62 +5,71 @@ import java.util.List;
 
 public class InteractionModel {
 
-    private DLine selected;
     private DLine hovered;
+    private final List<DLine> selected;
     private final List<Subscriber> subscribers;
     private final int handleRadius = 5;
 
     public InteractionModel() {
-        selected = null;
+        selected = new ArrayList<>();
         subscribers = new ArrayList<>();
     }
 
-    public DLine getSelected() { return selected; }
+    public void addSubscriber(Subscriber sub) { subscribers.add(sub);}
+    private void notifySubscribers() { subscribers.forEach(Subscriber::modelUpdated); }
+
+    public List<DLine> getSelected() { return selected; }
+    public DLine getHovered() { return hovered; }
+    public int getRadius() { return handleRadius; }
+
     public void setSelected(DLine line) {
-        selected = line;
+        selected.clear();
+        selected.add(line);
         notifySubscribers();
     }
 
-    public DLine getHovered() { return hovered; }
+    public void clearSelected() {
+        selected.clear();
+        notifySubscribers();
+    }
+
     public void setHovered(DLine line) {
         hovered = line;
         notifySubscribers();
     }
 
-    public int getRadius() { return handleRadius; }
-    public void addSubscriber(Subscriber sub) { subscribers.add(sub);}
-    private void notifySubscribers() { subscribers.forEach(Subscriber::modelUpdated); }
 
-
-    private boolean checkLeftPoint(double mx, double my) {
-        return Math.hypot(mx - selected.getX1(), my - selected.getY1()) <= handleRadius;
-    }
-
-
-    private boolean checkRightPoint(double mx, double my) {
-        return Math.hypot(mx - selected.getX2(), my - selected.getY2()) <= handleRadius;
+    private Endpoint checkEndPoint(double mx, double my) {
+        for (DLine line : selected) {
+            if (Math.hypot(mx - line.getX1(), my - line.getY1()) <= handleRadius) {
+                return line.getLeftEndpoint();
+            }
+            else if (Math.hypot(mx - line.getX2(), my - line.getY2()) <= handleRadius) {
+                return line.getRightEndpoint();
+            }
+        }
+        return null;
     }
 
 
     public boolean onHandle(double mx, double my) {
-        return checkLeftPoint(mx, my) || checkRightPoint(mx, my);
+        return checkEndPoint(mx, my) != null;
     }
 
 
     public Endpoint whichEndPoint(double mx, double my) {
-        if (checkLeftPoint(mx, my)) {
-            return selected.getLeftEndpoint();
+        Endpoint ep;
+
+        if ((ep = checkEndPoint(mx, my)) != null) {
+            return ep;
         }
-        else if (checkRightPoint(mx, my)) {
-            return selected.getRightEndpoint();
-        }
-        else {
-            return null;
-        }
+        return null;
     }
 
+
     public void updatePosition(Endpoint ep, double mx, double my) {
-        selected.updatePosition(ep, mx, my);
+        ep.setX(mx);
+        ep.setY(my);
         notifySubscribers();
     }
 
