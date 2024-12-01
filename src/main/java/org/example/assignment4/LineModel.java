@@ -20,8 +20,10 @@ public class LineModel {
         return line;
     }
 
-    public void deleteLine(DLine line) {
-        lines.remove(line);
+    public void deleteLine(List<DLine> sLines) {
+        for (DLine line : sLines) {
+            lines.remove(line);
+        }
         notifySubscribers();
     }
 
@@ -30,18 +32,24 @@ public class LineModel {
         notifySubscribers();
     }
 
-    public void moveLine(DLine line, double dx, double dy) {
-        line.moveLine(dx, dy);
+    public void moveLine(List<DLine> sLines, double dx, double dy) {
+        for (DLine line : sLines ) {
+            line.moveLine(dx, dy);
+        }
         notifySubscribers();
     }
 
-    public void rotateLine(DLine line, String direction) {
-        line.rotate(direction);
+    public void rotateLine(List<DLine> sLines, String direction) {
+        for (DLine line : sLines) {
+            line.rotate(direction);
+        }
         notifySubscribers();
     }
 
-    public void scaleLine(DLine line, String scale) {
-        line.scale(scale);
+    public void scaleLine(List<DLine> sLines, String scale) {
+        for (DLine line : sLines) {
+            line.scale(scale);
+        }
         notifySubscribers();
     }
 
