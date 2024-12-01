@@ -40,9 +40,7 @@ public class AppController {
 
     ControllerState ready = new ControllerState() {
 
-        @Override
         void handlePressed(MouseEvent e) {
-
             prevX = e.getX();
             prevY = e.getY();
 
@@ -56,14 +54,14 @@ public class AppController {
                 iModel.setSelected(model.overLine(e.getX(), e.getY()));
             }
             else {
-                iModel.setSelected(null);
+                iModel.clearSelected();
             }
         }
 
-        @Override
         void handleDragged(MouseEvent e) {
             if (e.isShiftDown()) {
                 DLine line = model.addLine(snapx, snapy, snapx, snapy);
+                iModel.clearSelected();
                 iModel.setSelected(line);
                 currentState = creating;
             }
@@ -72,11 +70,8 @@ public class AppController {
             }
         }
 
-
-        @Override
         void handleKeyPressed(KeyEvent e) {
             switch (e.getCode()) {
-
                 case DELETE:
                 case BACK_SPACE:
                     model.deleteLine(iModel.getSelected());
@@ -98,8 +93,6 @@ public class AppController {
             }
         }
 
-
-        @Override
         void handleMoved(MouseEvent e) {
             DLine line = model.overLine(e.getX(), e.getY());
             if (line != null) {
@@ -115,15 +108,13 @@ public class AppController {
 
     ControllerState creating = new ControllerState() {
 
-        @Override
         void handleDragged(MouseEvent e) {
-            model.adjustLine(iModel.getSelected(), e.getX(), e.getY());
+            model.adjustLine(iModel.getSelected().getFirst(), e.getX(), e.getY());
         }
 
-        @Override
         void handleReleased(MouseEvent e) {
             snap(e.getX(), e.getY());
-            model.adjustLine(iModel.getSelected(), snapx, snapy);
+            model.adjustLine(iModel.getSelected().getFirst(), snapx, snapy);
             currentState = ready;
         }
 
@@ -133,7 +124,6 @@ public class AppController {
 
     ControllerState dragging = new ControllerState() {
 
-        @Override
         void handleDragged(MouseEvent e) {
 
             double dx = e.getX() - prevX;
@@ -146,7 +136,6 @@ public class AppController {
 
         }
 
-        @Override
         void handleReleased(MouseEvent e) {
             currentState = ready;
         }
@@ -159,7 +148,6 @@ public class AppController {
 
         Endpoint ep;
 
-        @Override
         void handleDragged(MouseEvent e) {
             ep = iModel.whichEndPoint(prevX, prevY);
             iModel.updatePosition(ep, e.getX(), e.getY());
@@ -168,7 +156,6 @@ public class AppController {
             prevY = e.getY();
         }
 
-        @Override
         void handleReleased(MouseEvent e) {
             snap(e.getX(), e.getY());
             iModel.updatePosition(ep, snapx, snapy);
