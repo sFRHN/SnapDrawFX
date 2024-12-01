@@ -40,7 +40,24 @@ public class DLine {
 
     public void rotate(String direction) {
 
-        // Rotation
+        double angle = Math.toRadians(0);
+        if (direction.equals("clockwise")) {
+            angle = Math.toRadians(5);
+        } else if (direction.equals("counterclockwise")) {
+            angle = Math.toRadians(-5);
+        }
+        double midX = (getX1() + getX2()) / 2;
+        double midY = (getY1() + getY2()) / 2;
+
+        double newX1 = midX + (getX1() - midX) * Math.cos(angle) - (getY1() - midY) * Math.sin(angle);
+        double newY1 = midY + (getX1() - midX) * Math.sin(angle) + (getY1() - midY) * Math.cos(angle);
+        double newX2 = midX + (getX2() - midX) * Math.cos(angle) - (getY2() - midY) * Math.sin(angle);
+        double newY2 = midY + (getX2() - midX) * Math.sin(angle) + (getY2() - midY) * Math.cos(angle);
+
+        leftEP.setX(newX1);
+        leftEP.setY(newY1);
+        rightEP.setX(newX2);
+        rightEP.setY(newY2);
 
     }
 
