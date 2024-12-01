@@ -1,5 +1,6 @@
 package org.example.assignment4;
 
+import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
 
 public class MainUI extends StackPane {
@@ -21,6 +22,7 @@ public class MainUI extends StackPane {
         model.addSubscriber(view);
         iModel.addSubscriber(view);
 
+        Platform.runLater(view::requestFocus);
         this.getChildren().add(view);
     }
 

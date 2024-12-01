@@ -72,6 +72,21 @@ public class AppController {
             }
         }
 
+
+        @Override
+        void handleKeyPressed(KeyEvent e) {
+            switch (e.getCode()) {
+
+                case DELETE:
+                case BACK_SPACE:
+                    model.deleteLine(iModel.getSelected());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
         @Override
         void handleMoved(MouseEvent e) {
             DLine line = model.overLine(e.getX(), e.getY());

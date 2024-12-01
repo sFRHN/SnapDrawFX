@@ -26,9 +26,9 @@ public class DView extends StackPane implements Subscriber {
         myCanvas.setOnMousePressed(controller::handlePressed);
         myCanvas.setOnMouseDragged(controller::handleDragged);
         myCanvas.setOnMouseReleased(controller::handleReleased);
-        myCanvas.setOnKeyPressed(controller::handleKeyPressed);
-        myCanvas.setOnKeyReleased(controller::handleKeyReleased);
         myCanvas.setOnMouseMoved(controller::handleMoved);
+        setOnKeyPressed(controller::handleKeyPressed);
+        setOnKeyReleased(controller::handleKeyReleased);
     }
 
     private void draw() {
