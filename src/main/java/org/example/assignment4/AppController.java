@@ -81,6 +81,18 @@ public class AppController {
                 case BACK_SPACE:
                     model.deleteLine(iModel.getSelected());
                     break;
+                case UP:
+                    model.scaleLine(iModel.getSelected(),"up");
+                    break;
+                case DOWN:
+                    model.scaleLine(iModel.getSelected(),"down");
+                    break;
+                case LEFT:
+                    model.rotateLine(iModel.getSelected(),"counterclockwise");
+                    break;
+                case RIGHT:
+                    model.rotateLine(iModel.getSelected(),"clockwise");
+                    break;
                 default:
                     break;
             }
