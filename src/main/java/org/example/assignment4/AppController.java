@@ -8,7 +8,7 @@ public class AppController {
     private LineModel model;
     private InteractionModel iModel;
     private ControllerState currentState;
-    private double prevX, prevY, snapx, snapy;
+    private double prevX, prevY, snapX, snapY;
 
 
     public abstract static class ControllerState {
@@ -60,7 +60,7 @@ public class AppController {
 
         void handleDragged(MouseEvent e) {
             if (e.isShiftDown()) {
-                DLine line = model.addLine(snapx, snapy, snapx, snapy);
+                DLine line = model.addLine(snapX, snapY, snapX, snapY);
                 iModel.clearSelected();
                 iModel.setSelected(line);
                 currentState = creating;
@@ -95,12 +95,7 @@ public class AppController {
 
         void handleMoved(MouseEvent e) {
             DLine line = model.overLine(e.getX(), e.getY());
-            if (line != null) {
-                iModel.setHovered(line);
-            }
-            else {
-                iModel.setHovered(null);
-            }
+            iModel.setHovered(line);
         }
 
     };
@@ -114,7 +109,7 @@ public class AppController {
 
         void handleReleased(MouseEvent e) {
             snap(e.getX(), e.getY());
-            model.adjustLine(iModel.getSelected().getFirst(), snapx, snapy);
+            model.adjustLine(iModel.getSelected().getFirst(), snapX, snapY);
             currentState = ready;
         }
 
@@ -158,7 +153,7 @@ public class AppController {
 
         void handleReleased(MouseEvent e) {
             snap(e.getX(), e.getY());
-            iModel.updatePosition(ep, snapx, snapy);
+            iModel.updatePosition(ep, snapX, snapY);
             currentState = ready;
         }
 
@@ -167,8 +162,8 @@ public class AppController {
 
     public void snap(double x, double y) {
         Endpoint ep = model.findGrid(x, y);
-        snapx = ep.getX();
-        snapy = ep.getY();
+        snapX = ep.getX();
+        snapY = ep.getY();
     }
 
 }
