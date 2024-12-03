@@ -3,13 +3,15 @@ package org.example.assignment4;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AppController {
 
     private LineModel model;
     private InteractionModel iModel;
     private ControllerState currentState;
     private double prevX, prevY, snapX, snapY;
-
 
     public abstract static class ControllerState {
         void handleMoved(MouseEvent event) {}
@@ -177,13 +179,29 @@ public class AppController {
         }
 
         void handleDragged(MouseEvent e) {
-            double dx = e.getX() - prevX;
-            double dy = e.getY() - prevY;
 
-            model.moveLine(iModel.getSelected(), dx, dy);
+            double newX = Math.min(e.getX(), prevX);
+            double newY = Math.min(e.getY(), prevY);
+            double newWidth = Math.abs(e.getX() - prevX);
+            double newHeight = Math.abs(e.getY() - prevY);
 
-            prevX = e.getX();
-            prevY = e.getY();
+            iModel.resizeRubberband(newWidth, newHeight);
+            iModel.reposRubberband(newX, newY);
+
+        }
+
+        void handleReleased(MouseEvent e) {
+
+            List<DLine> linesWithin;
+            linesWithin = iModel.getRubberBand().getLinesWithin(model.getLines());
+            System.out.println(linesWithin);
+
+            for (DLine line : linesWithin) {
+                iModel.multiSelect(line);
+            }
+
+            iModel.resetRubberband();
+
         }
 
         void handleKeyReleased(KeyEvent e) {

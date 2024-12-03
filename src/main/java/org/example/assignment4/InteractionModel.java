@@ -9,10 +9,12 @@ public class InteractionModel {
     private final List<DLine> selected;
     private final List<Subscriber> subscribers;
     private final int handleRadius = 5;
+    private Rubberband rubberband;
 
     public InteractionModel() {
         selected = new ArrayList<>();
         subscribers = new ArrayList<>();
+        rubberband = new Rubberband(0,0,0,0);
     }
 
     public void addSubscriber(Subscriber sub) { subscribers.add(sub);}
@@ -75,6 +77,31 @@ public class InteractionModel {
         }
         return null;
     }
+
+    public Rubberband getRubberBand() {
+        return rubberband;
+    }
+
+    public void reposRubberband(double mx, double my) {
+        rubberband.setX(mx);
+        rubberband.setY(my);
+        notifySubscribers();
+    }
+
+    public void resizeRubberband(double dx, double dy) {
+        rubberband.setWidth(dx);
+        rubberband.setHeight(dy);
+        notifySubscribers();
+    }
+
+    public void resetRubberband() {
+        reposRubberband(0,0);
+        rubberband.setWidth(0);
+        rubberband.setHeight(0);
+        notifySubscribers();
+    }
+
+
 
 
     public void updatePosition(Endpoint ep, double mx, double my) {
