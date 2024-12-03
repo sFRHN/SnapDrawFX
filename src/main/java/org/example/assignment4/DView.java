@@ -35,6 +35,7 @@ public class DView extends StackPane implements Subscriber {
         int gridSize = 20;
         gc.clearRect(0, 0, myCanvas.getWidth(), myCanvas.getHeight());
         gc.setLineWidth(1);
+        gc.setLineDashes(0);
         gc.setStroke(new Color(0,0,0,0.1));
 
         // Draw the grid
@@ -45,6 +46,13 @@ public class DView extends StackPane implements Subscriber {
             gc.strokeLine(0, i, myCanvas.getWidth(), i);
         }
         model.getLines().forEach(this::drawLines);
+
+        // Draw the rubberband
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(2);
+        gc.setLineDashes(10);
+        gc.strokeRect(iModel.getRubberBand().getX(), iModel.getRubberBand().getY(), iModel.getRubberBand().getWidth(), iModel.getRubberBand().getHeight());
+
     }
 
     private void drawLines(DLine line) {

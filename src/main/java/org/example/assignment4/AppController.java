@@ -205,6 +205,7 @@ public class AppController {
         }
 
         void handleKeyReleased(KeyEvent e) {
+            iModel.resetRubberband();
             currentState = ready;
         }
 
