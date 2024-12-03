@@ -88,6 +88,9 @@ public class AppController {
                 case RIGHT:
                     model.rotateLine(iModel.getSelected(),"clockwise");
                     break;
+                case CONTROL:
+                    currentState = selecting;
+                    break;
                 default:
                     break;
             }
@@ -155,6 +158,41 @@ public class AppController {
             snap(e.getX(), e.getY());
             iModel.updatePosition(ep, snapX, snapY);
             currentState = ready;
+        }
+
+    };
+
+
+    ControllerState selecting = new ControllerState() {
+
+        void handlePressed(MouseEvent e) {
+
+            prevX = e.getX();
+            prevY = e.getY();
+
+            if (model.overLine(e.getX(), e.getY()) != null) {
+                iModel.multiSelect(model.overLine(e.getX(), e.getY()));
+            }
+
+        }
+
+        void handleDragged(MouseEvent e) {
+            double dx = e.getX() - prevX;
+            double dy = e.getY() - prevY;
+
+            model.moveLine(iModel.getSelected(), dx, dy);
+
+            prevX = e.getX();
+            prevY = e.getY();
+        }
+
+        void handleKeyReleased(KeyEvent e) {
+            currentState = ready;
+        }
+
+        void handleMoved(MouseEvent e) {
+            DLine line = model.overLine(e.getX(), e.getY());
+            iModel.setHovered(line);
         }
 
     };

@@ -28,6 +28,16 @@ public class InteractionModel {
         notifySubscribers();
     }
 
+    public void multiSelect(DLine line) {
+        if (selected.contains(line)) {
+            selected.remove(line);
+        }
+        else {
+            selected.add(line);
+        }
+        notifySubscribers();
+    }
+
     public void clearSelected() {
         selected.clear();
         notifySubscribers();
