@@ -39,7 +39,7 @@ public class AppController {
     public void handleKeyReleased(KeyEvent event) { currentState.handleKeyReleased(event); }
 
 
-
+    /* -------------------  READY STATE ------------------- */
     ControllerState ready = new ControllerState() {
 
         void handlePressed(MouseEvent e) {
@@ -110,6 +110,7 @@ public class AppController {
     };
 
 
+    /* -------------------  CREATING STATE ------------------- */
     ControllerState creating = new ControllerState() {
 
         void handleDragged(MouseEvent e) {
@@ -125,7 +126,7 @@ public class AppController {
     };
 
 
-
+    /* -------------------  DRAGGING STATE ------------------- */
     ControllerState dragging = new ControllerState() {
 
         void handleDragged(MouseEvent e) {
@@ -147,7 +148,7 @@ public class AppController {
     };
 
 
-
+    /* -------------------  RESIZING STATE ------------------- */
     ControllerState resizing = new ControllerState() {
 
         Endpoint ep;
@@ -169,6 +170,7 @@ public class AppController {
     };
 
 
+    /* -------------------  SELECTING STATE ------------------- */
     ControllerState selecting = new ControllerState() {
 
         void handlePressed(MouseEvent e) {
