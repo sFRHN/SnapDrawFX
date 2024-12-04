@@ -53,6 +53,7 @@ public class AppController {
                 currentState = resizing;
             }
             else  if (model.overLine(e.getX(), e.getY()) != null) {
+                iModel.clearSelected();
                 iModel.setSelected(model.overLine(e.getX(), e.getY()));
             }
             else {
@@ -67,8 +68,11 @@ public class AppController {
                 iModel.setSelected(line);
                 currentState = creating;
             }
-            else if (iModel.getSelected() != null) {
+            else if (iModel.getSelected() != null && model.overLine(e.getX(), e.getY()) != null) {
                 currentState = dragging;
+            }
+            else {
+                currentState = selecting;
             }
         }
 
@@ -197,7 +201,13 @@ public class AppController {
             System.out.println(linesWithin);
 
             for (DLine line : linesWithin) {
-                iModel.multiSelect(line);
+                if (e.isControlDown()) {
+                    iModel.multiSelect(line);
+                }
+                else {
+                    iModel.setSelected(line);
+                    currentState = ready;
+                }
             }
 
             iModel.resetRubberband();

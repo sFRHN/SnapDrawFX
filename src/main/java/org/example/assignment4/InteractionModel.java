@@ -25,7 +25,6 @@ public class InteractionModel {
     public int getRadius() { return handleRadius; }
 
     public void setSelected(DLine line) {
-        selected.clear();
         selected.add(line);
         notifySubscribers();
     }
