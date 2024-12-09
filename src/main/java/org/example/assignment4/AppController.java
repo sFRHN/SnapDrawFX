@@ -58,7 +58,7 @@ public class AppController {
 
         void handleDragged(MouseEvent e) {
             if (e.isShiftDown()) {
-                DLine line = model.addLine(snapX, snapY, snapX, snapY);
+                DLine line = model.createLine(snapX, snapY, snapX, snapY);
                 iModel.clearSelected();
                 iModel.setSelected(line);
                 currentState = creating;
@@ -92,6 +92,15 @@ public class AppController {
                 case CONTROL:
                     currentState = selecting;
                     break;
+                case G:
+                    group(iModel.getSelected());
+                    break;
+                case U:
+                    Groupable itemToUngroup = iModel.getSelected().stream()
+                            .filter(item -> item instanceof DGroup)
+                            .findFirst()
+                            .orElse(null);
+                    ungroup(itemToUngroup);
                 default:
                     break;
             }
@@ -234,6 +243,31 @@ public class AppController {
         Endpoint ep = model.findGrid(x, y);
         snapX = ep.getX();
         snapY = ep.getY();
+    }
+
+    private void group(List<Groupable> items) {
+        if (items.isEmpty()) {
+            System.out.println("Attempting to group, but no items selected");
+        } else {
+            DGroup dg = new DGroup(items);
+            model.deleteItem(iModel.getSelected());
+            model.addGroup(dg);
+            iModel.clearSelected();
+            iModel.setSelected(dg);
+        }
+    }
+
+    private void ungroup(Groupable group) {
+        if (group.isGroup()) {
+            model.deleteGroup(group);
+            model.addItem(group.getChildren());
+            for (Groupable child : group.getChildren()) {
+                iModel.setSelected(child);
+            }
+        }
+        else {
+            System.out.println("Attempting to ungroup, but item is not a group");
+        }
     }
 
 }
