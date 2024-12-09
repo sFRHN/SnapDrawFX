@@ -3,7 +3,6 @@ package org.example.assignment4;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AppController {
@@ -24,12 +23,8 @@ public class AppController {
 
     public AppController() { currentState = ready; }
 
-    public void setModel(LineModel model) {
-        this.model = model;
-    }
-    public void setIModel(InteractionModel iModel) {
-        this.iModel = iModel;
-    }
+    public void setModel(LineModel model) { this.model = model; }
+    public void setIModel(InteractionModel iModel) { this.iModel = iModel; }
 
     public void handleMoved(MouseEvent event) { currentState.handleMoved(event); }
     public void handlePressed(MouseEvent event) { currentState.handlePressed(event); }
@@ -52,9 +47,9 @@ public class AppController {
             else if (iModel.getSelected() != null && iModel.onHandle(e.getX(), e.getY())) {
                 currentState = resizing;
             }
-            else  if (model.overLine(e.getX(), e.getY()) != null) {
+            else  if (model.overItem(e.getX(), e.getY()) != null) {
                 iModel.clearSelected();
-                iModel.setSelected(model.overLine(e.getX(), e.getY()));
+                iModel.setSelected(model.overItem(e.getX(), e.getY()));
             }
             else {
                 iModel.clearSelected();
@@ -68,7 +63,7 @@ public class AppController {
                 iModel.setSelected(line);
                 currentState = creating;
             }
-            else if (iModel.getSelected() != null && model.overLine(e.getX(), e.getY()) != null) {
+            else if (iModel.getSelected() != null && model.overItem(e.getX(), e.getY()) != null) {
                 currentState = dragging;
             }
             else {
@@ -80,19 +75,19 @@ public class AppController {
             switch (e.getCode()) {
                 case DELETE:
                 case BACK_SPACE:
-                    model.deleteLine(iModel.getSelected());
+                    model.deleteItem(iModel.getSelected());
                     break;
                 case UP:
-                    model.scaleLine(iModel.getSelected(),"up");
+                    model.scaleItem(iModel.getSelected(),"up");
                     break;
                 case DOWN:
-                    model.scaleLine(iModel.getSelected(),"down");
+                    model.scaleItem(iModel.getSelected(),"down");
                     break;
                 case LEFT:
-                    model.rotateLine(iModel.getSelected(),"counterclockwise");
+                    model.rotateItem(iModel.getSelected(),"counterclockwise");
                     break;
                 case RIGHT:
-                    model.rotateLine(iModel.getSelected(),"clockwise");
+                    model.rotateItem(iModel.getSelected(),"clockwise");
                     break;
                 case CONTROL:
                     currentState = selecting;
@@ -103,8 +98,13 @@ public class AppController {
         }
 
         void handleMoved(MouseEvent e) {
-            DLine line = model.overLine(e.getX(), e.getY());
-            iModel.setHovered(line);
+            Groupable item = model.overItem(e.getX(), e.getY());
+            if (item != null && !item.isGroup()) {
+                iModel.setHovered((DLine)item);
+            }
+            else {
+                iModel.setHovered(null);
+            }
         }
 
     };
@@ -114,12 +114,12 @@ public class AppController {
     ControllerState creating = new ControllerState() {
 
         void handleDragged(MouseEvent e) {
-            model.adjustLine(iModel.getSelected().getFirst(), e.getX(), e.getY());
+            model.adjustLine((DLine)(iModel.getSelected().getFirst()), e.getX(), e.getY());
         }
 
         void handleReleased(MouseEvent e) {
             snap(e.getX(), e.getY());
-            model.adjustLine(iModel.getSelected().getFirst(), snapX, snapY);
+            model.adjustLine((DLine)(iModel.getSelected().getFirst()), snapX, snapY);
             currentState = ready;
         }
 
@@ -134,7 +134,7 @@ public class AppController {
             double dx = e.getX() - prevX;
             double dy = e.getY() - prevY;
 
-            model.moveLine(iModel.getSelected(), dx, dy);
+            model.moveItem(iModel.getSelected(), dx, dy);
 
             prevX = e.getX();
             prevY = e.getY();
@@ -163,6 +163,7 @@ public class AppController {
 
         void handleReleased(MouseEvent e) {
             snap(e.getX(), e.getY());
+            ep = iModel.whichEndPoint(prevX, prevY);
             iModel.updatePosition(ep, snapX, snapY);
             currentState = ready;
         }
@@ -178,8 +179,8 @@ public class AppController {
             prevX = e.getX();
             prevY = e.getY();
 
-            if (model.overLine(e.getX(), e.getY()) != null) {
-                iModel.multiSelect(model.overLine(e.getX(), e.getY()));
+            if (model.overItem(e.getX(), e.getY()) != null) {
+                iModel.multiSelect(model.overItem(e.getX(), e.getY()));
             }
 
         }
@@ -198,22 +199,17 @@ public class AppController {
 
         void handleReleased(MouseEvent e) {
 
-            List<DLine> linesWithin;
-            linesWithin = iModel.getRubberBand().getLinesWithin(model.getLines());
-            System.out.println(linesWithin);
+            List<Groupable> itemsWithin;
+            itemsWithin = iModel.getRubberBand().getItemsWithin(model.getItems());
 
-            for (DLine line : linesWithin) {
-                if (e.isControlDown()) {
-                    iModel.multiSelect(line);
-                }
-                else {
-                    iModel.setSelected(line);
-                    currentState = ready;
-                }
+            if (e.isControlDown()) {
+                itemsWithin.forEach(line -> iModel.multiSelect(line));
+            } else {
+                itemsWithin.forEach(line -> iModel.setSelected(line));
+                currentState = ready;
             }
 
             iModel.resetRubberband();
-
         }
 
         void handleKeyReleased(KeyEvent e) {
@@ -222,8 +218,13 @@ public class AppController {
         }
 
         void handleMoved(MouseEvent e) {
-            DLine line = model.overLine(e.getX(), e.getY());
-            iModel.setHovered(line);
+            Groupable item = model.overItem(e.getX(), e.getY());
+            if (item != null && !item.isGroup()) {
+                iModel.setHovered((DLine)item);
+            }
+            else {
+                iModel.setHovered(null);
+            }
         }
 
     };
