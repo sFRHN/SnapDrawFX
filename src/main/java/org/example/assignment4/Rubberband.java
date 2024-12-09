@@ -30,7 +30,6 @@ public class Rubberband {
                 this.contains(item.getRight(), item.getBottom()) ) {
 
                 itemsWithin.add(item);
-                System.out.println("Added");
             }
         }
 
