@@ -6,10 +6,10 @@ import java.util.List;
 public class InteractionModel {
 
     private DLine hovered;
-    private final List<DLine> selected;
+    private final List<Groupable> selected;
     private final List<Subscriber> subscribers;
     private final int handleRadius = 5;
-    private Rubberband rubberband;
+    private final Rubberband rubberband;
 
     public InteractionModel() {
         selected = new ArrayList<>();
@@ -20,21 +20,21 @@ public class InteractionModel {
     public void addSubscriber(Subscriber sub) { subscribers.add(sub);}
     private void notifySubscribers() { subscribers.forEach(Subscriber::modelUpdated); }
 
-    public List<DLine> getSelected() { return selected; }
+    public List<Groupable> getSelected() { return selected; }
     public DLine getHovered() { return hovered; }
     public int getRadius() { return handleRadius; }
 
-    public void setSelected(DLine line) {
-        selected.add(line);
+    public void setSelected(Groupable item) {
+        selected.add(item);
         notifySubscribers();
     }
 
-    public void multiSelect(DLine line) {
-        if (selected.contains(line)) {
-            selected.remove(line);
+    public void multiSelect(Groupable item) {
+        if (selected.contains(item)) {
+            selected.remove(item);
         }
         else {
-            selected.add(line);
+            selected.add(item);
         }
         notifySubscribers();
     }
@@ -51,12 +51,15 @@ public class InteractionModel {
 
 
     private Endpoint checkEndPoint(double mx, double my) {
-        for (DLine line : selected) {
-            if (Math.hypot(mx - line.getX1(), my - line.getY1()) <= handleRadius) {
-                return line.getLeftEndpoint();
-            }
-            else if (Math.hypot(mx - line.getX2(), my - line.getY2()) <= handleRadius) {
-                return line.getRightEndpoint();
+        for (Groupable item : selected) {
+            if (!item.isGroup()) {
+                DLine line = (DLine) item;
+                if (Math.hypot(mx - line.getX1(), my - line.getY1()) <= handleRadius) {
+                    return line.getLeftEndpoint();
+                }
+                else if (Math.hypot(mx - line.getX2(), my - line.getY2()) <= handleRadius) {
+                    return line.getRightEndpoint();
+                }
             }
         }
         return null;
@@ -99,9 +102,6 @@ public class InteractionModel {
         rubberband.setHeight(0);
         notifySubscribers();
     }
-
-
-
 
     public void updatePosition(Endpoint ep, double mx, double my) {
         ep.setX(mx);

@@ -5,24 +5,24 @@ import java.util.List;
 
 public class LineModel {
 
-    private final List<DLine> lines;
+    private final List<Groupable> items;
     private final List<Subscriber> subscribers;
 
     public LineModel() {
-        lines = new ArrayList<>();
+        items = new ArrayList<>();
         subscribers = new ArrayList<>();
     }
 
     public DLine addLine(double x1, double y1, double x2, double y2) {
         DLine line = new DLine(x1, y1, x2, y2);
-        lines.add(line);
+        items.add(line);
         notifySubscribers();
         return line;
     }
 
-    public void deleteLine(List<DLine> sLines) {
-        for (DLine line : sLines) {
-            lines.remove(line);
+    public void deleteItem(List<Groupable> sItems) {
+        for (Groupable item : sItems) {
+            items.remove(item);
         }
         notifySubscribers();
     }
@@ -32,23 +32,23 @@ public class LineModel {
         notifySubscribers();
     }
 
-    public void moveLine(List<DLine> sLines, double dx, double dy) {
-        for (DLine line : sLines ) {
-            line.moveLine(dx, dy);
+    public void moveItem(List<Groupable> sItems, double dx, double dy) {
+        for (Groupable item : sItems ) {
+            item.move(dx, dy);
         }
         notifySubscribers();
     }
 
-    public void rotateLine(List<DLine> sLines, String direction) {
-        for (DLine line : sLines) {
-            line.rotate(direction);
+    public void rotateItem(List<Groupable> sItems, String direction) {
+        for (Groupable item : sItems) {
+            item.rotate(direction);
         }
         notifySubscribers();
     }
 
-    public void scaleLine(List<DLine> sLines, String scale) {
-        for (DLine line : sLines) {
-            line.scale(scale);
+    public void scaleItem(List<Groupable> sItems, String scale) {
+        for (Groupable item : sItems) {
+            item.scale(scale);
         }
         notifySubscribers();
     }
@@ -62,17 +62,17 @@ public class LineModel {
         return new Endpoint(x, y);
     }
 
-    public DLine overLine(double mx, double my) {
-        for (DLine line : lines) {
-            if (line.onLine(mx, my)) {
-                return line;
+    public Groupable overItem(double mx, double my) {
+        for (Groupable item : items) {
+            if (item.contains(mx, my)) {
+                return item;
             }
         }
         return null;
     }
 
-    public List<DLine> getLines() {
-        return lines;
+    public List<Groupable> getItems() {
+        return items;
     }
 
     public void addSubscriber(Subscriber sub) {
