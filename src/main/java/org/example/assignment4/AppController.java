@@ -2,6 +2,10 @@ package org.example.assignment4;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import org.example.assignment4.DCommands.AdjustEPCommand;
+import org.example.assignment4.DCommands.CreateLineCommand;
+import org.example.assignment4.DCommands.DeleteItemCommand;
+import org.example.assignment4.DCommands.MoveCommand;
 
 import java.util.List;
 
@@ -73,6 +77,8 @@ public class AppController {
                 currentState = creating;
             }
             else if (iModel.getSelected() != null && model.overItem(e.getX(), e.getY()) != null) {
+                startX = prevX;
+                startY = prevY;
                 currentState = dragging;
             }
             else {
@@ -169,6 +175,12 @@ public class AppController {
         }
 
         void handleReleased(MouseEvent e) {
+
+            DCommand moveCommand = new MoveCommand(model, iModel.getSelected(), startX, startY, e.getX(), e.getY());
+            moveCommand.doIt();
+            iModel.getUndoStack().push(moveCommand);
+            iModel.getRedoStack().clear();
+
             currentState = ready;
         }
 
@@ -281,6 +293,7 @@ public class AppController {
 
     private void ungroup(Groupable group) {
         if (group.isGroup()) {
+            iModel.clearSelected();
             model.deleteItem(group);
             model.addItemList(group.getChildren());
             for (Groupable child : group.getChildren()) {

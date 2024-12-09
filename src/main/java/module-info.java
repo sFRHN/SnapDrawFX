@@ -5,4 +5,6 @@ module org.example.assignment4 {
 
     opens org.example.assignment4 to javafx.fxml;
     exports org.example.assignment4;
+    exports org.example.assignment4.DCommands;
+    opens org.example.assignment4.DCommands to javafx.fxml;
 }
