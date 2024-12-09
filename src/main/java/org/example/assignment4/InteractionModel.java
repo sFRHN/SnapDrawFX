@@ -2,6 +2,7 @@ package org.example.assignment4;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class InteractionModel {
 
@@ -10,11 +11,15 @@ public class InteractionModel {
     private final List<Subscriber> subscribers;
     private final int handleRadius = 5;
     private final Rubberband rubberband;
+    private final Stack<DCommand> undoStack;
+    private final Stack<DCommand> redoStack;
 
     public InteractionModel() {
         selected = new ArrayList<>();
         subscribers = new ArrayList<>();
         rubberband = new Rubberband(0,0,0,0);
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
     }
 
     public void addSubscriber(Subscriber sub) { subscribers.add(sub);}
@@ -22,7 +27,8 @@ public class InteractionModel {
 
     public List<Groupable> getSelected() { return selected; }
     public DLine getHovered() { return hovered; }
-    public int getRadius() { return handleRadius; }
+    public Stack<DCommand> getUndoStack() { return undoStack; }
+    public Stack<DCommand> getRedoStack() { return redoStack; }
 
     public void setSelected(Groupable item) {
         selected.add(item);
