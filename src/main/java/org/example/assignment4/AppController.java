@@ -173,7 +173,6 @@ public class AppController {
         void handleReleased(MouseEvent e) {
 
             DCommand moveCommand = new MoveCommand(model, iModel.getSelected(), startX, startY, e.getX(), e.getY());
-            moveCommand.doIt();
             iModel.getUndoStack().push(moveCommand);
             iModel.getRedoStack().clear();
 

@@ -24,7 +24,6 @@ public class MoveCommand implements DCommand {
     }
 
     public void doIt() {
-        model.moveItem(item, startX - endX, startY - endY);
         model.moveItem(item, endX - startX , endY - startY);
     }
 
