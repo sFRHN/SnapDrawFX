@@ -1,4 +1,8 @@
-package org.example.assignment4;
+package org.example.assignment4.DCommands;
+
+import org.example.assignment4.DCommand;
+import org.example.assignment4.Groupable;
+import org.example.assignment4.LineModel;
 
 import java.util.ArrayList;
 import java.util.List;
