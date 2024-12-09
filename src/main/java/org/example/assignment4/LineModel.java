@@ -19,11 +19,13 @@ public class LineModel {
 
     public void addItemList(List<Groupable> item) {
         items.addAll(item);
+        System.out.println("Model size: " + items.size());
         notifySubscribers();
     }
 
     public void addItem(Groupable group) {
         items.add(group);
+        System.out.println("Model size: " + items.size());
         notifySubscribers();
     }
 

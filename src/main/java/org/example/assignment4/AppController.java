@@ -283,7 +283,6 @@ public class AppController {
             System.out.println("Attempting to group, but no items selected");
         } else {
             DGroup dg = new DGroup(items);
-
             DCommand groupCommand = new GroupCommand(model, iModel, dg);
             groupCommand.doIt();
             iModel.getUndoStack().push(groupCommand);
@@ -293,12 +292,10 @@ public class AppController {
 
     private void ungroup(Groupable group) {
         if (group.isGroup()) {
-            iModel.clearSelected();
-            model.deleteItem(group);
-            model.addItemList(group.getChildren());
-            for (Groupable child : group.getChildren()) {
-                iModel.setSelected(child);
-            }
+            DCommand ungroupCommand = new UngroupCommand(model, iModel, (DGroup) group);
+            ungroupCommand.doIt();
+            iModel.getUndoStack().push(ungroupCommand);
+            iModel.getRedoStack().clear();
         }
         else {
             System.out.println("Attempting to ungroup, but item is not a group");
