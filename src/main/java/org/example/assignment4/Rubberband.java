@@ -19,20 +19,22 @@ public class Rubberband {
                 (this.y <= my && my <= this.y + this.height);
     }
 
-    public List<DLine> getLinesWithin(List<DLine> lines) {
+    public List<Groupable> getItemsWithin(List<Groupable> items) {
 
-        List<DLine> linesWithin = new ArrayList<DLine>();
+        List<Groupable> itemsWithin = new ArrayList<Groupable>();
 
-        for (DLine line : lines) {
-            if (this.contains(line.getX1(), line.getY1()) && this.contains(line.getX2(), line.getY2())) {
-                linesWithin.add(line);
+        for (Groupable item : items) {
+            if (this.contains(item.getLeft(), item.getTop()) &&
+                this.contains(item.getRight(), item.getTop()) &&
+                this.contains(item.getLeft(), item.getBottom()) &&
+                this.contains(item.getRight(), item.getBottom()) ) {
+
+                itemsWithin.add(item);
                 System.out.println("Added");
             }
         }
 
-        System.out.println(linesWithin.size());
-
-        return linesWithin;
+        return itemsWithin;
 
     }
 
