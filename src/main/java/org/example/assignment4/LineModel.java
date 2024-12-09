@@ -13,17 +13,32 @@ public class LineModel {
         subscribers = new ArrayList<>();
     }
 
-    public DLine addLine(double x1, double y1, double x2, double y2) {
+    public DLine createLine(double x1, double y1, double x2, double y2) {
         DLine line = new DLine(x1, y1, x2, y2);
         items.add(line);
         notifySubscribers();
         return line;
     }
 
+    public void addItem(List<Groupable> item) {
+        items.addAll(item);
+        notifySubscribers();
+    }
+
+    public void addGroup(Groupable group) {
+        items.add(group);
+        notifySubscribers();
+    }
+
     public void deleteItem(List<Groupable> sItems) {
         for (Groupable item : sItems) {
             items.remove(item);
         }
+        notifySubscribers();
+    }
+
+    public void deleteGroup(Groupable group) {
+        items.remove(group);
         notifySubscribers();
     }
 
