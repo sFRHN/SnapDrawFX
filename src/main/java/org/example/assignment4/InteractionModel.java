@@ -31,7 +31,9 @@ public class InteractionModel {
     public Stack<DCommand> getRedoStack() { return redoStack; }
 
     public void setSelected(Groupable item) {
-        selected.add(item);
+        if (!selected.contains(item)) {
+            selected.add(item);
+        }
         notifySubscribers();
     }
 

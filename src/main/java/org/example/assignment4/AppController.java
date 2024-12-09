@@ -54,7 +54,6 @@ public class AppController {
                 currentState = resizing;
             }
             else  if (model.overItem(e.getX(), e.getY()) != null) {
-                iModel.clearSelected();
                 iModel.setSelected(model.overItem(e.getX(), e.getY()));
             }
             else {
