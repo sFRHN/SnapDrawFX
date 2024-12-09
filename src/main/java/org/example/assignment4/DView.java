@@ -52,7 +52,7 @@ public class DView extends StackPane implements Subscriber {
             else {
                 item.draw(gc, false);
             }
-            if (iModel.getHovered() == (DLine)item) {
+            if (iModel.getHovered() == item) {
                 gc.setStroke(Color.rgb(128, 128, 128, 0.25));
                 gc.setLineWidth(10);
                 gc.strokeLine(((DLine)item).getX1(), ((DLine)item).getY1(), ((DLine)item).getX2(), ((DLine)item).getY2());
