@@ -2,10 +2,7 @@ package org.example.assignment4;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.example.assignment4.DCommands.AdjustEPCommand;
-import org.example.assignment4.DCommands.CreateLineCommand;
-import org.example.assignment4.DCommands.DeleteItemCommand;
-import org.example.assignment4.DCommands.MoveCommand;
+import org.example.assignment4.DCommands.*;
 
 import java.util.List;
 
@@ -272,21 +269,25 @@ public class AppController {
     };
 
 
+    /* -------------------  SNAPPING ------------------- */
     public void snap(double x, double y) {
         Endpoint ep = model.findGrid(x, y);
         snapX = ep.getX();
         snapY = ep.getY();
     }
 
+
+    /* -------------------  GROUPING / UNGROUPING ------------------- */
     private void group(List<Groupable> items) {
         if (items.isEmpty()) {
             System.out.println("Attempting to group, but no items selected");
         } else {
             DGroup dg = new DGroup(items);
-            model.deleteItemList(iModel.getSelected());
-            model.addItem(dg);
-            iModel.clearSelected();
-            iModel.setSelected(dg);
+
+            DCommand groupCommand = new GroupCommand(model, iModel, dg);
+            groupCommand.doIt();
+            iModel.getUndoStack().push(groupCommand);
+            iModel.getRedoStack().clear();
         }
     }
 
@@ -304,6 +305,8 @@ public class AppController {
         }
     }
 
+
+    /* -------------------  UNDO / REDO ------------------- */
     private void undo() {
         if (!iModel.getUndoStack().isEmpty()) {
             iModel.getRedoStack().push(iModel.getUndoStack().peek());
