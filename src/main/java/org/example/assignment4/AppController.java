@@ -11,7 +11,7 @@ public class AppController {
     private LineModel model;
     private InteractionModel iModel;
     private ControllerState currentState;
-    private double startX, startY, prevX, prevY, snapX, snapY;
+    private double startX, startY, prevX, prevY, snapX, snapY, rotateCount = 0, scaleCount = 0;
 
     public abstract static class ControllerState {
         void handleMoved(MouseEvent event) {}
@@ -93,15 +93,19 @@ public class AppController {
                     break;
                 case UP:
                     model.scaleItem(iModel.getSelected(),"up");
+                    scaleCount++;
                     break;
                 case DOWN:
                     model.scaleItem(iModel.getSelected(),"down");
+                    scaleCount--;
                     break;
                 case LEFT:
                     model.rotateItem(iModel.getSelected(),"counterclockwise");
+                    rotateCount--;
                     break;
                 case RIGHT:
                     model.rotateItem(iModel.getSelected(),"clockwise");
+                    rotateCount++;
                     break;
                 case CONTROL:
                     currentState = selecting;
@@ -122,6 +126,18 @@ public class AppController {
                     redo();
                     break;
                 default:
+                    break;
+            }
+        }
+
+        void handleKeyReleased(KeyEvent e) {
+            switch (e.getCode()) {
+                case LEFT:
+                case RIGHT:
+                    DCommand rotateCommand = new RotateCommand(model, iModel.getSelected(), rotateCount);
+                    iModel.getUndoStack().push(rotateCommand);
+                    iModel.getRedoStack().clear();
+                    rotateCount = 0;
                     break;
             }
         }
