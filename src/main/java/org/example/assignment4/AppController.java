@@ -61,10 +61,10 @@ public class AppController {
 
                 iModel.clearSelected();
                 DLine line = model.createLine(snapX, snapY, snapX, snapY);
-                DCommand command = new CreateLineCommand(model, line);
-                command.doIt();
+                DCommand addCommand = new CreateLineCommand(model, line);
+                addCommand.doIt();
 
-                iModel.getUndoStack().push(command);
+                iModel.getUndoStack().push(addCommand);
                 iModel.getRedoStack().clear();
                 iModel.setSelected(line);
 
@@ -82,7 +82,10 @@ public class AppController {
             switch (e.getCode()) {
                 case DELETE:
                 case BACK_SPACE:
-                    model.deleteItemList(iModel.getSelected());
+                    DCommand delCommand = new DeleteItemCommand(model, iModel.getSelected());
+                    iModel.getUndoStack().push(delCommand);
+                    iModel.getRedoStack().clear();
+                    delCommand.doIt();
                     break;
                 case UP:
                     model.scaleItem(iModel.getSelected(),"up");
@@ -107,6 +110,7 @@ public class AppController {
                             .stream()
                             .filter(item -> item instanceof DGroup)
                             .findFirst().ifPresent(item -> ungroup(item));
+                    break;
                 case Z:
                     undo();
                     break;
@@ -288,12 +292,18 @@ public class AppController {
             iModel.getUndoStack().pop().undo();
             iModel.clearSelected();
         }
+        else {
+            System.out.println("Undo stack empty");
+        }
     }
 
     private void redo() {
         if (!iModel.getRedoStack().isEmpty()) {
             iModel.getUndoStack().push(iModel.getRedoStack().peek());
             iModel.getRedoStack().pop().doIt();
+        }
+        else {
+            System.out.println("Redo stack empty");
         }
     }
 
