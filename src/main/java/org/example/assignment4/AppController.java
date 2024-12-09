@@ -58,9 +58,16 @@ public class AppController {
 
         void handleDragged(MouseEvent e) {
             if (e.isShiftDown()) {
-                DLine line = model.createLine(snapX, snapY, snapX, snapY);
+
                 iModel.clearSelected();
+                DLine line = model.createLine(snapX, snapY, snapX, snapY);
+                DCommand command = new CreateLineCommand(model, line);
+                command.doIt();
+
+                iModel.getUndoStack().push(command);
+                iModel.getRedoStack().clear();
                 iModel.setSelected(line);
+
                 currentState = creating;
             }
             else if (iModel.getSelected() != null && model.overItem(e.getX(), e.getY()) != null) {
@@ -75,7 +82,7 @@ public class AppController {
             switch (e.getCode()) {
                 case DELETE:
                 case BACK_SPACE:
-                    model.deleteItem(iModel.getSelected());
+                    model.deleteItemList(iModel.getSelected());
                     break;
                 case UP:
                     model.scaleItem(iModel.getSelected(),"up");
@@ -96,11 +103,16 @@ public class AppController {
                     group(iModel.getSelected());
                     break;
                 case U:
-                    Groupable itemToUngroup = iModel.getSelected().stream()
+                    iModel.getSelected()
+                            .stream()
                             .filter(item -> item instanceof DGroup)
-                            .findFirst()
-                            .orElse(null);
-                    ungroup(itemToUngroup);
+                            .findFirst().ifPresent(item -> ungroup(item));
+                case Z:
+                    undo();
+                    break;
+                case R:
+                    redo();
+                    break;
                 default:
                     break;
             }
@@ -250,8 +262,8 @@ public class AppController {
             System.out.println("Attempting to group, but no items selected");
         } else {
             DGroup dg = new DGroup(items);
-            model.deleteItem(iModel.getSelected());
-            model.addGroup(dg);
+            model.deleteItemList(iModel.getSelected());
+            model.addItem(dg);
             iModel.clearSelected();
             iModel.setSelected(dg);
         }
@@ -259,14 +271,29 @@ public class AppController {
 
     private void ungroup(Groupable group) {
         if (group.isGroup()) {
-            model.deleteGroup(group);
-            model.addItem(group.getChildren());
+            model.deleteItem(group);
+            model.addItemList(group.getChildren());
             for (Groupable child : group.getChildren()) {
                 iModel.setSelected(child);
             }
         }
         else {
             System.out.println("Attempting to ungroup, but item is not a group");
+        }
+    }
+
+    private void undo() {
+        if (!iModel.getUndoStack().isEmpty()) {
+            iModel.getRedoStack().push(iModel.getUndoStack().peek());
+            iModel.getUndoStack().pop().undo();
+            iModel.clearSelected();
+        }
+    }
+
+    private void redo() {
+        if (!iModel.getRedoStack().isEmpty()) {
+            iModel.getUndoStack().push(iModel.getRedoStack().peek());
+            iModel.getRedoStack().pop().doIt();
         }
     }
 
