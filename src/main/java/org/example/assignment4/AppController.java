@@ -139,6 +139,13 @@ public class AppController {
                     iModel.getRedoStack().clear();
                     rotateCount = 0;
                     break;
+                case UP:
+                case DOWN:
+                    DCommand scaleCommand = new ScaleCommand(model, iModel.getSelected(), scaleCount);
+                    iModel.getUndoStack().push(scaleCommand);
+                    iModel.getRedoStack().clear();
+                    scaleCount = 0;
+                    break;
             }
         }
 
