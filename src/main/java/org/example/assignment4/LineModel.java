@@ -51,6 +51,12 @@ public class LineModel {
         notifySubscribers();
     }
 
+    public void updatePosition(Endpoint ep, double mx, double my) {
+        ep.setX(mx);
+        ep.setY(my);
+        notifySubscribers();
+    }
+
     public void rotateItem(List<Groupable> sItems, String direction) {
         for (Groupable item : sItems) {
             item.rotate(direction);

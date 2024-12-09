@@ -109,10 +109,4 @@ public class InteractionModel {
         notifySubscribers();
     }
 
-    public void updatePosition(Endpoint ep, double mx, double my) {
-        ep.setX(mx);
-        ep.setY(my);
-        notifySubscribers();
-    }
-
 }
