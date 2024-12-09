@@ -19,7 +19,6 @@ public class DView extends StackPane implements Subscriber {
     }
 
     public void setModel(LineModel model) { this.model = model; }
-
     public void setiModel(InteractionModel iModel) { this.iModel = iModel;}
 
     public void setupEvents(AppController controller) {
@@ -45,7 +44,20 @@ public class DView extends StackPane implements Subscriber {
         for (int i = 0; i < myCanvas.getHeight(); i += gridSize) {
             gc.strokeLine(0, i, myCanvas.getWidth(), i);
         }
-        model.getLines().forEach(this::drawLines);
+
+        model.getItems().forEach(item -> {
+            if (iModel.getSelected().contains(item)) {
+                item.draw(gc, true);
+            }
+            else {
+                item.draw(gc, false);
+            }
+            if (iModel.getHovered() == (DLine)item) {
+                gc.setStroke(Color.rgb(128, 128, 128, 0.25));
+                gc.setLineWidth(10);
+                gc.strokeLine(((DLine)item).getX1(), ((DLine)item).getY1(), ((DLine)item).getX2(), ((DLine)item).getY2());
+            }
+        });
 
         // Draw the rubberband
         gc.setStroke(Color.RED);
@@ -54,40 +66,6 @@ public class DView extends StackPane implements Subscriber {
         gc.strokeRect(iModel.getRubberBand().getX(), iModel.getRubberBand().getY(), iModel.getRubberBand().getWidth(), iModel.getRubberBand().getHeight());
 
     }
-
-    private void drawLines(DLine line) {
-
-        gc.setLineWidth(2);
-        if (iModel.getSelected().contains(line)) {
-            gc.setStroke(Color.PINK);
-        } else {
-            gc.setStroke(Color.MEDIUMPURPLE);
-        }
-        gc.strokeLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
-
-        if (iModel.getHovered() == line) {
-            gc.setStroke(Color.rgb(128, 128, 128, 0.25));
-            gc.setLineWidth(10);
-            gc.strokeLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
-        }
-        if (iModel.getSelected().contains(line)) {
-            drawHandles(line);
-        }
-
-
-    }
-
-    private void drawHandles(DLine line) {
-        gc.setFill(Color.WHITE);
-        gc.setLineWidth(2);
-        double circleRadius = iModel.getRadius();
-        gc.strokeOval(line.getX1()- circleRadius, line.getY1() - circleRadius, 2 * circleRadius, 2 * circleRadius);
-        gc.strokeOval(line.getX2() - circleRadius, line.getY2() - circleRadius, 2 * circleRadius, 2 * circleRadius);
-        gc.fillOval(line.getX1()- circleRadius, line.getY1() - circleRadius, 2 * circleRadius, 2 * circleRadius);
-        gc.fillOval(line.getX2() - circleRadius, line.getY2() - circleRadius, 2 * circleRadius, 2 * circleRadius);
-    }
-
-
 
     public void modelUpdated() {
         draw();
