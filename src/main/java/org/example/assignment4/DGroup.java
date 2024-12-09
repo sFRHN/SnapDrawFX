@@ -55,6 +55,7 @@ public class DGroup implements Groupable {
 
     public void draw(GraphicsContext gc, boolean selected) {
         if (selected) {
+            gc.setLineWidth(3);
             gc.setStroke(Color.PINK);
             gc.strokeRect(left, top, Math.abs(right-left), Math.abs(bottom-top));
         }
