@@ -28,8 +28,8 @@ public class DGroup implements Groupable {
     }
 
     public void rotate(String direction) {
-        double centerX = Math.abs(right - left) / 2;
-        double centerY = Math.abs(bottom - top) / 2;
+        double centerX = Math.abs(right + left) / 2;
+        double centerY = Math.abs(bottom + top) / 2;
         rotate(direction, centerX, centerY);
     }
 
@@ -41,8 +41,8 @@ public class DGroup implements Groupable {
     }
 
     public void scale(String scale) {
-        double centerX = Math.abs(right - left) / 2;
-        double centerY = Math.abs(bottom - top) / 2;
+        double centerX = Math.abs(right + left) / 2;
+        double centerY = Math.abs(bottom + top) / 2;
         scale(scale, centerX, centerY);
     }
 
