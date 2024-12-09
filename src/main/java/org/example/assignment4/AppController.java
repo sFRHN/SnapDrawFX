@@ -10,7 +10,7 @@ public class AppController {
     private LineModel model;
     private InteractionModel iModel;
     private ControllerState currentState;
-    private double prevX, prevY, snapX, snapY;
+    private double startX, startY, prevX, prevY, snapX, snapY;
 
     public abstract static class ControllerState {
         void handleMoved(MouseEvent event) {}
@@ -45,6 +45,8 @@ public class AppController {
                 snap(e.getX(), e.getY());
             }
             else if (iModel.getSelected() != null && iModel.onHandle(e.getX(), e.getY())) {
+                startX = prevX;
+                startY = prevY;
                 currentState = resizing;
             }
             else  if (model.overItem(e.getX(), e.getY()) != null) {
@@ -180,7 +182,7 @@ public class AppController {
 
         void handleDragged(MouseEvent e) {
             ep = iModel.whichEndPoint(prevX, prevY);
-            iModel.updatePosition(ep, e.getX(), e.getY());
+            model.updatePosition(ep, e.getX(), e.getY());
 
             prevX = e.getX();
             prevY = e.getY();
@@ -189,7 +191,11 @@ public class AppController {
         void handleReleased(MouseEvent e) {
             snap(e.getX(), e.getY());
             ep = iModel.whichEndPoint(prevX, prevY);
-            iModel.updatePosition(ep, snapX, snapY);
+
+            DCommand adjustCommand = new AdjustEPCommand(model, ep, startX, startY, snapX, snapY);
+            adjustCommand.doIt();
+            iModel.getUndoStack().push(adjustCommand);
+            iModel.getRedoStack().clear();
             currentState = ready;
         }
 
@@ -290,7 +296,6 @@ public class AppController {
         if (!iModel.getUndoStack().isEmpty()) {
             iModel.getRedoStack().push(iModel.getUndoStack().peek());
             iModel.getUndoStack().pop().undo();
-            iModel.clearSelected();
         }
         else {
             System.out.println("Undo stack empty");
