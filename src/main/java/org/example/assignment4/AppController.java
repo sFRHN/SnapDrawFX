@@ -13,6 +13,9 @@ public class AppController {
     private ControllerState currentState;
     private double startX, startY, prevX, prevY, snapX, snapY, rotateCount = 0, scaleCount = 0;
 
+    /* 
+     * Controller State Class
+     */
     public abstract static class ControllerState {
         void handleMoved(MouseEvent event) {}
         void handlePressed(MouseEvent event) {}
@@ -22,6 +25,9 @@ public class AppController {
         void handleKeyReleased(KeyEvent event) {}
     }
 
+    /* 
+     * App Controller Class
+     */
     public AppController() { currentState = ready; }
 
     public void setModel(LineModel model) { this.model = model; }
@@ -44,12 +50,15 @@ public class AppController {
             startX = prevX;
             startY = prevY;
 
+            /* Snap to grid if shift is pressed */
             if (e.isShiftDown()) {
                 snap(e.getX(), e.getY());
             }
+            /* Check if on a handle */
             else if (iModel.getSelected() != null && iModel.onHandle(e.getX(), e.getY())) {
                 currentState = resizing;
             }
+            /* Check if on an item that is not selected */
             else if (model.overItem(e.getX(), e.getY()) != null) {
                 if (!iModel.getSelected().contains(model.overItem(e.getX(), e.getY()))) {
                     iModel.clearSelected();
@@ -57,6 +66,7 @@ public class AppController {
                 }
             }
         }
+
 
         void handleReleased(MouseEvent e) {
             if (model.overItem(e.getX(), e.getY()) != null) {
@@ -68,9 +78,10 @@ public class AppController {
             }
         }
 
-        void handleDragged(MouseEvent e) {
-            if (e.isShiftDown()) {
 
+        void handleDragged(MouseEvent e) {
+
+            if (e.isShiftDown()) {
                 iModel.clearSelected();
                 DLine line = model.createLine(snapX, snapY, snapX, snapY);
                 DCommand addCommand = new CreateLineCommand(model, line);
@@ -82,6 +93,7 @@ public class AppController {
 
                 currentState = creating;
             }
+            /* If clicking on an already selected item */
             else if (iModel.getSelected() != null && model.overItem(e.getX(), e.getY()) != null) {
                 startX = prevX;
                 startY = prevY;
@@ -92,6 +104,7 @@ public class AppController {
             }
         }
 
+        
         void handleKeyPressed(KeyEvent e) {
             switch (e.getCode()) {
                 case DELETE:
@@ -279,6 +292,7 @@ public class AppController {
         void handleReleased(MouseEvent e) {
 
             List<Groupable> itemsWithin;
+            iModel.clearSelected();
             itemsWithin = iModel.getRubberBand().getItemsWithin(model.getItems());
 
             if (e.isControlDown()) {
