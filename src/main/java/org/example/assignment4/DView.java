@@ -1,3 +1,9 @@
+/*
+ * NAME: Sayed Farhaan Rafi Bhat
+ * NSID: bcl568
+ * Student Number: 11354916
+ */
+
 package org.example.assignment4;
 
 import javafx.scene.canvas.Canvas;
@@ -12,6 +18,10 @@ public class DView extends StackPane implements Subscriber {
     private final GraphicsContext gc;
     private final Canvas myCanvas;
 
+
+    /**
+     * Constructor for DView
+     */
     public DView() {
         myCanvas = new Canvas(1000, 800);
         gc = myCanvas.getGraphicsContext2D();
@@ -30,6 +40,10 @@ public class DView extends StackPane implements Subscriber {
         setOnKeyReleased(controller::handleKeyReleased);
     }
 
+
+    /**
+     * Draw the canvas
+     */
     private void draw() {
         int gridSize = 20;
         gc.clearRect(0, 0, myCanvas.getWidth(), myCanvas.getHeight());
@@ -46,16 +60,16 @@ public class DView extends StackPane implements Subscriber {
         }
 
         model.getItems().forEach(item -> {
+            if (iModel.getHovered() == item) {
+                gc.setStroke(Color.rgb(128, 128, 128, 0.1));
+                gc.setLineWidth(10);
+                gc.strokeLine(((DLine)item).getX1(), ((DLine)item).getY1(), ((DLine)item).getX2(), ((DLine)item).getY2());
+            }
             if (iModel.getSelected().contains(item)) {
                 item.draw(gc, true);
             }
             else {
                 item.draw(gc, false);
-            }
-            if (iModel.getHovered() == item) {
-                gc.setStroke(Color.rgb(128, 128, 128, 0.25));
-                gc.setLineWidth(10);
-                gc.strokeLine(((DLine)item).getX1(), ((DLine)item).getY1(), ((DLine)item).getX2(), ((DLine)item).getY2());
             }
         });
 

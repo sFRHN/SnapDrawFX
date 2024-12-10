@@ -1,3 +1,9 @@
+/*
+ * NAME: Sayed Farhaan Rafi Bhat
+ * NSID: bcl568
+ * Student Number: 11354916
+ */
+
 package org.example.assignment4.DCommands;
 
 import org.example.assignment4.DCommand;
@@ -20,11 +26,15 @@ public class ScaleCommand implements DCommand {
     }
 
     public void doIt() {
+
+        // Scale the item up if scaleCount is positive
         if (scaleCount > 0) {
             for (int i = 0; i < Math.abs(scaleCount); i++) {
                 model.scaleItem(item, "up");
             }
         }
+
+        // Scale the item down if scaleCount is negative
         else if (scaleCount < 0) {
             for (int i = 0; i < Math.abs(scaleCount); i++) {
                 model.scaleItem(item, "down");
@@ -33,11 +43,15 @@ public class ScaleCommand implements DCommand {
     }
 
     public void undo() {
+
+        // Scale the item down if scaleCount is positive
         if (scaleCount > 0) {
             for (int i = 0; i < Math.abs(scaleCount); i++) {
                 model.scaleItem(item, "down");
             }
         }
+
+        // Scale the item up if scaleCount is negative
         else if (scaleCount < 0) {
             for (int i = 0; i < Math.abs(scaleCount); i++) {
                 model.scaleItem(item, "up");

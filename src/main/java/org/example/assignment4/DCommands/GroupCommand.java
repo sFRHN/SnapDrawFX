@@ -1,3 +1,9 @@
+/*
+ * NAME: Sayed Farhaan Rafi Bhat
+ * NSID: bcl568
+ * Student Number: 11354916
+ */
+
 package org.example.assignment4.DCommands;
 
 import org.example.assignment4.*;
@@ -10,6 +16,9 @@ public class GroupCommand implements DCommand {
     private Groupable group;
     private InteractionModel iModel;
 
+    /**
+     * Constructor for GroupCommand
+     */
     public GroupCommand(LineModel model, InteractionModel iModel, DGroup group) {
         this.model = model;
         this.iModel = iModel;

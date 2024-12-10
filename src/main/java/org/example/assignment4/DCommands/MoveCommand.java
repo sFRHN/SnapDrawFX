@@ -1,3 +1,9 @@
+/*
+ * NAME: Sayed Farhaan Rafi Bhat
+ * NSID: bcl568
+ * Student Number: 11354916
+ */
+
 package org.example.assignment4.DCommands;
 
 import org.example.assignment4.DCommand;
@@ -14,6 +20,9 @@ public class MoveCommand implements DCommand {
     private List<Groupable> item;
     private double startX, startY, endX, endY;
 
+    /**
+     * Constructor for MoveCommand
+     */
     public MoveCommand(LineModel model, List<Groupable> item, double startX, double startY, double endX, double endY) {
         this.model = model;
         this.item = new ArrayList<Groupable>(item);

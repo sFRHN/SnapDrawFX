@@ -1,3 +1,9 @@
+/*
+ * NAME: Sayed Farhaan Rafi Bhat
+ * NSID: bcl568
+ * Student Number: 11354916
+ */
+
 package org.example.assignment4;
 
 import javafx.scene.input.KeyEvent;
@@ -292,7 +298,6 @@ public class AppController {
         void handleReleased(MouseEvent e) {
 
             List<Groupable> itemsWithin;
-            iModel.clearSelected();
             itemsWithin = iModel.getRubberBand().getItemsWithin(model.getItems());
 
             if (e.isControlDown()) {

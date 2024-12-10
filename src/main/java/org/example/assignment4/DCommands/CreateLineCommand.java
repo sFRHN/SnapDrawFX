@@ -1,3 +1,9 @@
+/*
+ * NAME: Sayed Farhaan Rafi Bhat
+ * NSID: bcl568
+ * Student Number: 11354916
+ */
+
 package org.example.assignment4.DCommands;
 
 import org.example.assignment4.DCommand;
@@ -10,6 +16,10 @@ public class CreateLineCommand implements DCommand {
     private DLine item;
     private double mx, my;
 
+
+    /**
+     * Constructor for CreateLineCommand
+     */
     public CreateLineCommand(LineModel model, DLine item) {
         this.model = model;
         this.item = item;

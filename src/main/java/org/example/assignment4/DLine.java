@@ -1,3 +1,9 @@
+/*
+ * NAME: Sayed Farhaan Rafi Bhat
+ * NSID: bcl568
+ * Student Number: 11354916
+ */
+
 package org.example.assignment4;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -9,31 +15,37 @@ public class DLine implements Groupable {
 
     private final Endpoint leftEP, rightEP;
 
+
+    /**
+     * Constructor for DLine
+     */
     public DLine(double x1, double y1, double x2, double y2) {
         this.leftEP = new Endpoint(x1, y1);
         this.rightEP = new Endpoint(x2, y2);
     }
 
-    public boolean isGroup() {
-        return false;
-    }
 
-    public List<Groupable> getChildren() {
-        return null;
-    }
-
+    /**
+     * Method to adjust the line by the endpoint
+     */
     public void adjust(double mx, double my) {
         rightEP.setX(mx);
         rightEP.setY(my);
     }
 
 
+    /**
+     * Method to move the line by a certain amount
+     */
     public void move(double dx, double dy) {
         this.leftEP.move(dx, dy);
         this.rightEP.move(dx, dy);
     }
 
 
+    /**
+     * Method to rotate the line by a certain amount
+     */
     public void rotate(String direction) {
 
         double angle = Math.toRadians(0);
@@ -57,6 +69,10 @@ public class DLine implements Groupable {
 
     }
 
+
+    /**
+     * Method to rotate the line by a certain amount around a certain point
+     */
     public void rotate(String direction, double centerX, double centerY) {
 
         double angle = Math.toRadians(0);
@@ -78,6 +94,10 @@ public class DLine implements Groupable {
 
     }
 
+
+    /**
+     * Method to scale the line by a certain amount
+     */
     public void scale(String scale) {
 
         double factor = 1.0;
@@ -102,6 +122,10 @@ public class DLine implements Groupable {
 
     }
 
+
+    /**
+     * Method to scale the line by a certain amount around a certain point
+     */
     public void scale(String scale, double centerX, double centerY) {
 
         double factor = 1.0;
@@ -125,43 +149,58 @@ public class DLine implements Groupable {
     }
 
 
+    /**
+     * Checks if the line contains a point
+     */
     public boolean contains(double mx, double my) {
 
-        double numerator, denominator, fraction;
-        numerator = Math.abs((getY2() - getY1()) * mx - (getX2() - getX1()) * my + getX2() * getY1() - getY2() * getX1());
-        denominator = Math.sqrt(Math.pow(getY2() - getY1(), 2) + Math.pow(getX2() - getX1(), 2));
-        fraction = numerator / denominator;
+        double x1 = getX1();
+        double y1 = getY1();
+        double x2 = getX2();
+        double y2 = getY2();
 
-        if (fraction > 5) {
+        double length = Math.hypot(x2 - x1, y2 - y1);
+        double ratioA = (y1 - y2) / length;
+        double ratioB = (x2 - x1) / length;
+        double ratioC = -1 * ((y1 - y2) * x1 + (x2 - x1) * y1) / length;
+
+        double distance = Math.abs(ratioA * mx + ratioB * my + ratioC);
+
+        double t = ((mx-x1)*(x2-x1) + (my-y1)*(y2-y1)) / (length * length);
+
+        if (t< 0 || t > 1) {
             return false;
         }
 
-        // Check if the point is within the segment
-        double minX = Math.min(getX1(), getX2());
-        double maxX = Math.max(getX1(), getX2());
-        double minY = Math.min(getY1(), getY2());
-        double maxY = Math.max(getY1(), getY2());
-
-        return (mx >= minX && mx <= maxX && my >= minY && my <= maxY);
+        return distance <= 5;
 
     }
 
+
+    /**
+     * Draws the line
+     */
     public void draw(GraphicsContext gc, boolean selected) {
 
         gc.setLineWidth(2);
-        gc.setStroke(selected ? Color.PINK : Color.MEDIUMPURPLE);
+        gc.setStroke(selected ? Color.PINK : Color.PURPLE);
         gc.strokeLine(getX1(), getY1(), getX2(), getY2());
         if (selected) { drawHandles(gc); }
 
     }
 
+
+    /**
+     * Method to draw the handles
+     */
     private void drawHandles(GraphicsContext gc) {
 
-        gc.setFill(Color.WHITE);
+        gc.setStroke(Color.BLACK);
         gc.setLineWidth(2);
         double circleRadius = 5;
         gc.strokeOval(this.getX1()- circleRadius, this.getY1() - circleRadius, 2 * circleRadius, 2 * circleRadius);
         gc.strokeOval(this.getX2() - circleRadius, this.getY2() - circleRadius, 2 * circleRadius, 2 * circleRadius);
+        gc.setFill(Color.WHITESMOKE);
         gc.fillOval(this.getX1()- circleRadius, this.getY1() - circleRadius, 2 * circleRadius, 2 * circleRadius);
         gc.fillOval(this.getX2() - circleRadius, this.getY2() - circleRadius, 2 * circleRadius, 2 * circleRadius);
 
@@ -174,6 +213,8 @@ public class DLine implements Groupable {
     public double getY2() { return rightEP.getY(); }
     public Endpoint getLeftEndpoint() { return leftEP; }
     public Endpoint getRightEndpoint() { return rightEP; }
+    public boolean isGroup() { return false; }
+    public List<Groupable> getChildren() { return null; }
 
     public double getLeft() { return Math.min(leftEP.getX(), rightEP.getX()); }
     public double getRight() { return Math.max(rightEP.getX(), leftEP.getX()); }
