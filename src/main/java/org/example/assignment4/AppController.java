@@ -50,20 +50,22 @@ public class AppController {
             else if (iModel.getSelected() != null && iModel.onHandle(e.getX(), e.getY())) {
                 currentState = resizing;
             }
-            else  if (model.overItem(e.getX(), e.getY()) != null) {
+            else if (model.overItem(e.getX(), e.getY()) != null) {
                 if (!iModel.getSelected().contains(model.overItem(e.getX(), e.getY()))) {
                     iModel.clearSelected();
                     iModel.setSelected(model.overItem(e.getX(), e.getY()));
                 }
             }
-            else {
-                iModel.clearSelected();
-            }
         }
 
         void handleReleased(MouseEvent e) {
+            if (model.overItem(e.getX(), e.getY()) != null) {
                 iModel.clearSelected();
                 iModel.setSelected(model.overItem(e.getX(), e.getY()));
+            }
+            else {
+                iModel.clearSelected();
+            }
         }
 
         void handleDragged(MouseEvent e) {
