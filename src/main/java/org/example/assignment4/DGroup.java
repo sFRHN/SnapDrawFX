@@ -16,8 +16,14 @@ public class DGroup implements Groupable {
     }
 
     public boolean contains(double mx, double my) {
-        return (this.left <= mx && mx <= this.right) &&
-                (this.top <= my && my <= this.bottom);
+//        return (this.left <= mx && mx <= this.right) &&
+//                (this.top <= my && my <= this.bottom);
+        for (Groupable child : children) {
+            if (child.contains(mx, my)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void move(double dx, double dy) {
