@@ -75,6 +75,8 @@ public class AppController {
 
 
         void handleReleased(MouseEvent e) {
+
+            // Only select the line being clicked on
             if (model.overItem(e.getX(), e.getY()) != null) {
                 iModel.clearSelected();
                 iModel.setSelected(model.overItem(e.getX(), e.getY()));
