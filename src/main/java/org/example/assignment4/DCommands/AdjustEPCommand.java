@@ -16,6 +16,9 @@ public class AdjustEPCommand implements DCommand {
     private final Endpoint ep;
     private double startX, startY, endX, endY;
 
+    /**
+     * Constructor for AdjustEPCommand
+     */
     public AdjustEPCommand(LineModel model, Endpoint ep, double startX, double startY, double endX, double endY) {
         this.model = model;
         this.ep = ep;
