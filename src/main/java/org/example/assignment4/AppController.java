@@ -41,21 +41,29 @@ public class AppController {
         void handlePressed(MouseEvent e) {
             prevX = e.getX();
             prevY = e.getY();
+            startX = prevX;
+            startY = prevY;
 
             if (e.isShiftDown()) {
                 snap(e.getX(), e.getY());
             }
             else if (iModel.getSelected() != null && iModel.onHandle(e.getX(), e.getY())) {
-                startX = prevX;
-                startY = prevY;
                 currentState = resizing;
             }
             else  if (model.overItem(e.getX(), e.getY()) != null) {
-                iModel.setSelected(model.overItem(e.getX(), e.getY()));
+                if (!iModel.getSelected().contains(model.overItem(e.getX(), e.getY()))) {
+                    iModel.clearSelected();
+                    iModel.setSelected(model.overItem(e.getX(), e.getY()));
+                }
             }
             else {
                 iModel.clearSelected();
             }
+        }
+
+        void handleReleased(MouseEvent e) {
+                iModel.clearSelected();
+                iModel.setSelected(model.overItem(e.getX(), e.getY()));
         }
 
         void handleDragged(MouseEvent e) {
@@ -170,8 +178,16 @@ public class AppController {
         }
 
         void handleReleased(MouseEvent e) {
+            double oldSnapX = snapX;
+            double oldSnapY = snapY;
             snap(e.getX(), e.getY());
-            model.adjustLine((DLine)(iModel.getSelected().getFirst()), snapX, snapY);
+
+            Endpoint ep = iModel.whichEndPoint(e.getX(), e.getY());
+            DCommand adjustEPCommand = new AdjustEPCommand(model, ep, oldSnapX, oldSnapY, snapX, snapY);
+            adjustEPCommand.doIt();
+            iModel.getUndoStack().push(adjustEPCommand);
+            iModel.getRedoStack().clear();
+
             currentState = ready;
         }
 
