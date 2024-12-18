@@ -1,12 +1,14 @@
 # Overview
 This project is an interactive system developed in JavaFX that demonstrates various interaction techniques:  
-basic transforms, snap-to-grid, multiple select, object grouping, and undo/redo.  
+basic transforms, snap-to-grid, multiple select, object grouping, and undo/redo.
+
+![Visual Editor Preview](Sample.png)
 
 The project is structured using a full MVC architecture and includes the following features:
 
 # Features Implemented
 
-## Part 1: Point Transforms and Snap-to-Grid
+## Point Transforms and Snap-to-Grid
 - **Line Creation**: Users can create new lines by pressing the **Shift** key and dragging the mouse.  
 - **Endpoint Movement**: Users can move a line's endpoint by pressing and dragging the mouse.  
 - **Snap-to-Grid**: Endpoints snap to a 20-pixel grid when the mouse is released.  
@@ -25,7 +27,7 @@ The project is structured using a full MVC architecture and includes the followi
 
 ---
 
-## Part 2: Multiple Select and Grouping
+## Multiple Select and Grouping
 - **Multiple Selection**: Users can select multiple items by:  
   - Pressing **Control** and clicking on items.  
   - Dragging a rubber-band rectangle around the items.  
@@ -41,7 +43,7 @@ The project is structured using a full MVC architecture and includes the followi
 
 ---
 
-## Part 3: Undo/Redo
+## Undo/Redo
 - **Undo/Redo System**: Implemented using the command pattern. Commands include:  
   - Create line  
   - Delete items  
@@ -52,7 +54,14 @@ The project is structured using a full MVC architecture and includes the followi
   - Group  
   - Ungroup  
 - **Undo**: Pressing the **Z** key undoes the top command on the undo stack.  
-- **Redo**: Pressing the **R** key redoes the top command on the redo stack.  
+- **Redo**: Pressing the **R** key redoes the top command on the redo stack.
+
+![Visual Editor Preview](Usage.gif)
+
+---
+
+## Running the Program
+The project can be run by running the 'EditorApp' class.
 
 ---
 
@@ -79,15 +88,7 @@ The project is structured using a full MVC architecture and includes the followi
   - **UngroupCommand**: Command for ungrouping items.  
 - **Subscriber**: Interface for subscribers to the model.  
 
----
-
-## How to Run
-1. Extract the folder.  
-2. Open the project in IntelliJ and click **"Trust this project"**.  
-3. Wait for the configuration to load.  
-4. Run the **EditorApp** class.  
-
----
-
-## Notes
 The **DCommands** have been separated into a different folder for more clarity.
+
+---
+
